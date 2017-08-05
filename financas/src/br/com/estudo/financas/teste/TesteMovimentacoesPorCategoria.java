@@ -7,7 +7,6 @@ import javax.persistence.Query;
 
 import br.com.estudo.financas.modelo.Categoria;
 import br.com.estudo.financas.modelo.Movimentacao;
-import br.com.estudo.financas.modelo.TipoMovimentacao;
 import br.com.estudo.financas.util.JPAUtil;
 
 public class TesteMovimentacoesPorCategoria {
