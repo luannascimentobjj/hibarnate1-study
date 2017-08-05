@@ -1,10 +1,9 @@
 package br.com.estudo.financas.teste;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import br.com.estudo.financas.modelo.Conta;
+import br.com.estudo.financas.util.JPAUtil;
 
 public class TesteConta {
 	
@@ -12,20 +11,24 @@ public class TesteConta {
 	
 		Conta conta = new Conta();
 		
-		conta.setTitular("Luan");
+		conta.setId(1);
+		conta.setTitular("Lucas");
 		conta.setAgencia("1234");
-		conta.setBanco("Bradesco");
+		conta.setBanco("BB");
 		conta.setNumero("456");
 		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("financas");
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = new JPAUtil().getEntityManager();
 		
 		em.getTransaction().begin();
-		em.persist(conta);
-		em.getTransaction().commit();
 		
+		conta = em.find(Conta.class, 1);
+		
+		em.remove(conta);
+		
+		conta.setBanco("Santander");
+		
+		em.getTransaction().commit();
 		em.close();
-		emf.close();
 		
 	}
 	
