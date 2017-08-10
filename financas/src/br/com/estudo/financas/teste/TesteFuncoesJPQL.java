@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import br.com.estudo.financas.modelo.Conta;
 import br.com.estudo.financas.modelo.Movimentacao;
@@ -21,15 +22,17 @@ public class TesteFuncoesJPQL {
 		Conta conta = new Conta();
 		conta.setId(2);
 		
-		String jpql = "select sum(m.valor) from Movimentacao m where m.conta = :pConta" + 
+		String jpql = "select avg(m.valor) from Movimentacao m where m.conta = :pConta" + 
 		" and m.tipo = :pTipo " +
-		" order by m.valor desc "; 
-		Query query = em.createQuery(jpql);
+		" group by m.data ";
+		
+		TypedQuery<Double> query = em.createQuery(jpql, Double.class);
 		query.setParameter("pConta", conta);
 		query.setParameter("pTipo", TipoMovimentacao.SAIDA);
 		
-		BigDecimal soma  = (BigDecimal) query.getSingleResult();
-		System.out.println("A soma é: " + soma);
+		List<Double> medias  = query.getResultList();
+		Double double1 = medias.get(0);
+		System.out.println("A media do dia 09 é: " + medias.get(0));
 		
 		em.getTransaction().commit();
 		em.close();
