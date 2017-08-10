@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import br.com.estudo.financas.dao.MovimentacaoDAO;
 import br.com.estudo.financas.modelo.Conta;
 import br.com.estudo.financas.modelo.Movimentacao;
 import br.com.estudo.financas.modelo.TipoMovimentacao;
@@ -22,15 +23,11 @@ public class TesteFuncoesJPQL {
 		Conta conta = new Conta();
 		conta.setId(2);
 		
-		String jpql = "select avg(m.valor) from Movimentacao m where m.conta = :pConta" + 
-		" and m.tipo = :pTipo " +
-		" group by m.data ";
+		TypedQuery<Double> typedQuery = em.createNamedQuery("MediasPorDiaETipo", Double.class);
+		typedQuery.setParameter("pConta", conta);
+		typedQuery.setParameter("pTipo", TipoMovimentacao.SAIDA);
 		
-		TypedQuery<Double> query = em.createQuery(jpql, Double.class);
-		query.setParameter("pConta", conta);
-		query.setParameter("pTipo", TipoMovimentacao.SAIDA);
-		
-		List<Double> medias  = query.getResultList();
+		List<Double> medias = typedQuery.getResultList();
 		Double double1 = medias.get(0);
 		System.out.println("A media do dia 09 é: " + medias.get(0));
 		
